@@ -1,124 +1,101 @@
-# Personal C++ Projects
+# C++ Projects
 
-This repository is my personal C++ playground.
+This repository contains my personal C++ projects.
 
-It exists as a space to explore C++ deeply — from fundamental language mechanics to larger systems and experimental projects. Some code here is small and focused on understanding a concept, while other parts evolve into larger tools or experiments.
+Unlike my experimentation repositories, the focus here is on **building complete applications and systems** using C++. These projects are designed to combine multiple concepts such as program architecture, state management, algorithms, and performance considerations.
 
-The goal of this repository is not to produce perfect code immediately, but to **build intuition about how C++ actually works**.
-
-C++ rewards curiosity, precision, and persistence — this repository is where that process happens.
+The goal is to move beyond small experiments and create **fully functional software**.
 
 ---
 
-## Areas of Exploration
+## Types of Projects
 
-### Core Language Experiments
+Projects in this repository may include:
 
-Hands-on experiments exploring the foundations of C++ such as:
+### Games
 
-* pointers and memory layout
-* references and value semantics
-* arrays and low-level data structures
-* unions and type representation
-* object lifetimes and RAII
+Interactive projects that explore logic, architecture, and real-time program behavior.
 
-These experiments focus on understanding what happens **under the hood**, not just using the language.
+Examples may include:
 
----
-
-### Data Structures & Algorithms
-
-Implementation and experimentation with classical data structures and algorithmic thinking.
-
-Topics include:
-
-* hash tables
-* trees and binary search trees
-* graph traversal
-* recursion and problem solving
-* algorithmic optimization
-
-These projects help strengthen problem-solving skills and build intuition for technical interviews and real systems.
-
----
-
-### Systems & Performance Experiments
-
-C++ is a systems language, so part of this repository focuses on understanding performance and control over hardware.
-
-Experiments may include:
-
-* memory management
-* cache behavior
-* custom allocators
-* performance comparisons
-* low-level optimizations
-
----
-
-### Games & Interactive Projects
-
-Small games and interactive programs built to explore program structure, state management, and creative programming in C++.
-
-These projects may include:
-
-* console games
+* Snake
+* Tetris
+* small simulation projects
 * simple graphical games
-* game logic simulations
-* physics or movement experiments
 
-Games are a great way to combine logic, structure, and creativity.
+Games are a great way to practice structuring programs and managing state.
 
 ---
 
-### Tooling & Utilities
+### Systems & Utilities
 
-Occasionally this repository will also contain small utilities written in C++ that solve practical problems or automate tasks.
+Small tools and systems that explore practical C++ usage.
 
-Examples include:
+Examples:
 
-* command line tools
+* command line utilities
 * parsers
-* small system utilities
-* experimental developer tools
+* file processing tools
+* experimental system utilities
 
 ---
 
-## Learning Philosophy
+### Visualizations & Simulations
 
-This repository is not about copying solutions.
+Projects designed to visualize algorithms or simulate systems.
 
-It is about:
+Possible topics include:
 
-* understanding how the language works internally
-* experimenting with ideas and verifying assumptions
-* debugging until the root cause becomes clear
-* implementing concepts from scratch
-* learning through iteration
-
-Some projects will be incomplete.
-Some will be rewritten multiple times.
-That is part of the process.
+* pathfinding visualization
+* algorithm demonstrations
+* physics simulations
+* grid-based systems
 
 ---
 
-## Current Focus
+## Goals of This Repository
 
-My current learning path includes studying concepts from:
+Projects here aim to practice:
 
-* *The C++ Programming Language* by Bjarne Stroustrup
-* modern C++ practices
-* algorithmic problem solving
-* building practical systems in C++
+* structuring larger programs
+* separating logic into modules
+* writing maintainable C++ code
+* combining algorithms with real applications
+* experimenting with performance and optimization
 
-Each experiment in this repository reflects progress along that journey.
+Each project is an opportunity to apply ideas learned through experimentation and study.
 
 ---
 
-## Rule of This Repository
+## Development Philosophy
 
-If something behaves unexpectedly, I investigate it.
-If something fails, I debug it.
-If something feels difficult, I study it until it becomes clear.
+These projects prioritize:
 
-This repository is the record of that process.
+* learning through building
+* writing clean and readable code
+* iterative improvement
+* understanding trade-offs in design decisions
+
+Some projects may start simple and evolve over time as new ideas are explored.
+
+---
+
+## Current Direction
+
+Current areas of interest include:
+
+* game development in C++
+* algorithm visualizations
+* interactive console and graphical applications
+* experimenting with program architecture
+
+This repository represents an ongoing journey of learning by building.
+
+---
+
+## Guiding Principle
+
+Build something.
+Break it.
+Improve it.
+Repeat.
