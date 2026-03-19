@@ -57,6 +57,10 @@ void Game::run()
 		if (current_time - last_move_time > delay)
 		{
 			Position next_head = snake.next_head();
+			if (next_head.x < 0 || (next_head.x >= (width / cell_size)) || next_head.y < 0 || (next_head.y >= (height / cell_size)))
+			{
+				game_over = true;
+			}
 			for (const auto& b : snake.snake_body())
 			{
 				if (next_head == b)
