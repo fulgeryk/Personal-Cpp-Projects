@@ -46,8 +46,8 @@ This project was developed to practice game loops, collision detection, and clea
 1. Clone the repository:
 
 ```bash
-git clone <your-repo-link>
-cd snake-game
+git clone https://github.com/fulgeryk/Personal-Cpp-Projects.git
+cd Snake
 ```
 
 2. Build using CMake:
@@ -60,7 +60,7 @@ cmake --build build
 3. Run:
 
 ```bash
-./build/snake_game
+./build/Debug/snake_game.exe
 ```
 
 ---
