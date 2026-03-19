@@ -3,6 +3,7 @@
 
 constexpr uint16_t width = 800;
 constexpr uint16_t height = 600;
+
 Game::Game() : window(sf::VideoMode({ width, height }), "Snake Game"), snake {Position((width/cell_size)/2, (height/cell_size)/2)}
 {
 	window.setFramerateLimit(60);
@@ -55,17 +56,33 @@ void Game::run()
 		std::chrono::milliseconds delay(150);
 		if (current_time - last_move_time > delay)
 		{
-			if (snake.next_head() == food)
+			Position next_head = snake.next_head();
+			for (const auto& b : snake.snake_body())
 			{
-				snake.move(true);
-				spawnFood();
-				show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
+				if (next_head == b)
+				{
+					game_over = true;
+					break;
+				}
+			}
+			if(!game_over)
+			{
+				if (next_head == food)
+				{
+					snake.move(true);
+					spawnFood();
+					show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
+				}
+				else
+				{
+					snake.move(false);
+				}
+				last_move_time = current_time;
 			}
 			else
 			{
-				snake.move(false);
+				window.close();
 			}
-			last_move_time = current_time;
 		}
 		window.display();
 	}

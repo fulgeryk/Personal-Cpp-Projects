@@ -14,6 +14,7 @@ private:
 	Snake snake;
 	std::chrono::high_resolution_clock::time_point last_move_time = std::chrono::high_resolution_clock::now();
 	Position food;
+	bool game_over = false;
 public:
 	Game();
 	void run();
