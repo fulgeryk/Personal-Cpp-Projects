@@ -10,11 +10,13 @@ Game::Game() : window(sf::VideoMode({ width, height }), "Snake Game"), snake {Po
 }
 void Game::run()
 {
+	// Food on screen
 	spawnFood();
 	sf::RectangleShape show_food;
 	show_food.setSize(sf::Vector2f(cell_size, cell_size));
 	show_food.setFillColor(sf::Color::White);
 	show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
+	// Set Game Over on screen
 	const sf::Font font("assets/Roboto.ttf");
 	sf::Text text(font, "Game Over!");
 	text.setCharacterSize(30);
@@ -23,6 +25,13 @@ void Game::run()
 	auto bounds = text.getLocalBounds();
 	text.setOrigin(sf::Vector2f(static_cast<float>(bounds.position.x + bounds.size.x / 2), static_cast<float>(bounds.position.y + bounds.size.y / 2)));
 	text.setPosition(sf::Vector2f(static_cast<float>(width / 2), static_cast<float>(height / 2)));
+	// Set restart on screen
+	sf::Text restart(font, "Press R to restart!");
+	restart.setStyle(sf::Text::Bold);
+	restart.setFillColor(sf::Color::Red);
+	auto restart_bounds = restart.getLocalBounds();
+	restart.setOrigin(sf::Vector2f(static_cast<float>(restart_bounds.position.x + restart_bounds.size.x / 2), static_cast<float>(restart_bounds.position.y + restart_bounds.size.y / 2)));
+	restart.setPosition(sf::Vector2f(static_cast<float>(width / 2), static_cast<float>((height / 2) + 2*cell_size)));
 	while (window.isOpen())
 	{
 		while (const std::optional event = window.pollEvent())
@@ -43,6 +52,11 @@ void Game::run()
 				case sf::Keyboard::Key::Right:
 					snake.setDirection(Direction::Right);
 					break;
+				}
+				if (game_over && keypressed->code == sf::Keyboard::Key::R)
+				{
+					resetGame();
+					show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
 				}
 			}
 			if (event->is<sf::Event::Closed>())
@@ -77,7 +91,7 @@ void Game::run()
 					break;
 				}
 			}
-			if(!game_over)
+			if (!game_over)
 			{
 				if (next_head == food)
 				{
@@ -91,10 +105,11 @@ void Game::run()
 				}
 				last_move_time = current_time;
 			}
-			else
-			{
-				window.draw(text);
-			}
+		}
+		if(game_over)
+		{
+			window.draw(text);
+			window.draw(restart);
 		}
 		window.display();
 	}
@@ -114,4 +129,11 @@ void Game::spawnFood()
 				valid = false;
 		}
 	}
+}
+void Game::resetGame()
+{
+	snake = Snake(Position((width / cell_size) / 2, (height / cell_size) / 2));
+	spawnFood();
+	game_over = false;
+	last_move_time = std::chrono::high_resolution_clock::now();
 }

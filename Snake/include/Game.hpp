@@ -19,4 +19,5 @@ public:
 	Game();
 	void run();
 	void spawnFood();
+	void resetGame();
 };
