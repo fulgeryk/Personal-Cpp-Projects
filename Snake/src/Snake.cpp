@@ -39,3 +39,23 @@ const Position& Snake::head() const
 {
 	return body.back();
 }
+Position Snake::next_head() const
+{
+	Position head = body.back();
+	switch (direction)
+	{
+	case Direction::Up:
+		head.y -= 1;
+		break;
+	case Direction::Down:
+		head.y += 1;
+		break;
+	case Direction::Left:
+		head.x -= 1;
+		break;
+	case Direction::Right:
+		head.x += 1;
+		break;
+	}
+	return head;
+}

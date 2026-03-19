@@ -17,4 +17,5 @@ public:
 	void move(bool eat);
 	const std::vector<Position>& snake_body() const;
 	const Position& head() const;
+	Position next_head() const;
 };

@@ -9,10 +9,33 @@ Game::Game() : window(sf::VideoMode({ width, height }), "Snake Game"), snake {Po
 }
 void Game::run()
 {
+	spawnFood();
+	sf::RectangleShape show_food;
+	show_food.setSize(sf::Vector2f(cell_size, cell_size));
+	show_food.setFillColor(sf::Color::White);
+	show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
 	while (window.isOpen())
 	{
 		while (const std::optional event = window.pollEvent())
 		{
+			if (const auto* keypressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				switch (keypressed->code)
+				{
+				case sf::Keyboard::Key::Up:
+					snake.setDirection(Direction::Up);
+					break;
+				case sf::Keyboard::Key::Down:
+					snake.setDirection(Direction::Down);
+					break;
+				case sf::Keyboard::Key::Left:
+					snake.setDirection(Direction::Left);
+					break;
+				case sf::Keyboard::Key::Right:
+					snake.setDirection(Direction::Right);
+					break;
+				}
+			}
 			if (event->is<sf::Event::Closed>())
 				window.close();
 		}
@@ -27,6 +50,39 @@ void Game::run()
 			show_snake.setPosition({ screen_x, screen_y });
 			window.draw(show_snake);
 		}
+		window.draw(show_food);
+		auto current_time = std::chrono::high_resolution_clock::now();
+		std::chrono::milliseconds delay(150);
+		if (current_time - last_move_time > delay)
+		{
+			if (snake.next_head() == food)
+			{
+				snake.move(true);
+				spawnFood();
+				show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
+			}
+			else
+			{
+				snake.move(false);
+			}
+			last_move_time = current_time;
+		}
 		window.display();
+	}
+}
+void Game::spawnFood()
+{
+	bool valid = false;
+	while(!valid)
+	{
+		int randomwidth = rand() % (width / cell_size);
+		int randomheight = rand() % (height / cell_size);
+		food = Position(randomwidth, randomheight);
+		valid = true;
+		for (const auto& vec : snake.snake_body())
+		{
+			if (vec == food)
+				valid = false;
+		}
 	}
 }
