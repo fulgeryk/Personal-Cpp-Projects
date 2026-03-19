@@ -15,6 +15,14 @@ void Game::run()
 	show_food.setSize(sf::Vector2f(cell_size, cell_size));
 	show_food.setFillColor(sf::Color::White);
 	show_food.setPosition({ static_cast<float>(food.x * cell_size) , static_cast<float>(food.y * cell_size) });
+	const sf::Font font("assets/Roboto.ttf");
+	sf::Text text(font, "Game Over!");
+	text.setCharacterSize(30);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
+	auto bounds = text.getLocalBounds();
+	text.setOrigin(sf::Vector2f(static_cast<float>(bounds.position.x + bounds.size.x / 2), static_cast<float>(bounds.position.y + bounds.size.y / 2)));
+	text.setPosition(sf::Vector2f(static_cast<float>(width / 2), static_cast<float>(height / 2)));
 	while (window.isOpen())
 	{
 		while (const std::optional event = window.pollEvent())
@@ -85,7 +93,7 @@ void Game::run()
 			}
 			else
 			{
-				window.close();
+				window.draw(text);
 			}
 		}
 		window.display();
