@@ -1,0 +1,11 @@
+{
+  "name": "breakout-game",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "sfml",
+      "features": [ "graphics" ]
+    },
+    "fmt"
+  ]
+}
