@@ -1,0 +1,21 @@
+#include "Paddle.hpp"
+
+namespace breakout::entities
+{
+	void Paddle::setDirection(Direction new_direction)
+	{
+		direction = new_direction;
+	}
+	void Paddle::move(float delta_time)
+	{
+		float misc = speed * delta_time;
+		if (direction == Direction::Left)
+		{
+			position.x -= misc;
+		}
+		else if (direction == Direction::Right)
+		{
+			position.x += misc;
+		}
+	}
+}

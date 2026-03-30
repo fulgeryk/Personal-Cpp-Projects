@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include "Paddle.hpp"
 
 namespace breakout::core
 {
@@ -9,8 +9,8 @@ namespace breakout::core
 	{
 	private:
 		sf::RenderWindow window;
-		static constexpr int cell_size = 20;
 		bool game_over = false;
+		breakout::entities::Paddle pad;
 	public:
 		Game();
 		void run();
