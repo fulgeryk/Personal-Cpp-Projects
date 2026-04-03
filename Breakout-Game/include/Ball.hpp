@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Position.hpp"
 #include <iostream>
 #include <cmath>

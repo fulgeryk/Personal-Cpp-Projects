@@ -3,7 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include "Paddle.hpp"
 #include "Ball.hpp"
+#include <Brick.hpp>
 #include <chrono>
+#include <vector>
 
 namespace breakout::core
 {
@@ -15,8 +17,10 @@ namespace breakout::core
 		breakout::entities::Paddle pad;
 		breakout::entities::Ball ball;
 		std::chrono::high_resolution_clock::time_point last_move_time;
+		std::vector<breakout::entities::Brick> bricks;
 	public:
 		Game();
 		void run();
+		void initBricks();
 	};
 }
