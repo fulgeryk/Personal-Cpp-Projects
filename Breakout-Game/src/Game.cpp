@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include <optional>
 
+
 constexpr uint16_t width = 800;
 constexpr uint16_t height = 600;
 constexpr float paddle_width = 100.f;
@@ -9,10 +10,16 @@ constexpr float paddle_speed = 400.f;
 constexpr uint8_t offset = 30;
 constexpr float pad_position_width = (width / 2 - paddle_width / 2);
 constexpr float pad_position_height = (static_cast<float>(height) - paddle_height - static_cast<float>(offset));
+constexpr float left_boundary = 0.f;
+constexpr float right_boundary = width;
+constexpr float radius = 10.f; // radius of ball
+constexpr float initial_ball_velocity_x = 200.f;
+constexpr float initial_ball_velocity_y = -200.f;
 
 namespace breakout::core {
-    Game::Game() : window(sf::VideoMode({ width, height }), "Breakout Game"), last_move_time{ std::chrono::steady_clock::now() }, pad{ breakout::core::Position(pad_position_width, pad_position_height), paddle_width , paddle_height, paddle_speed }
-
+    Game::Game() : window(sf::VideoMode({ width, height }), "Breakout Game"), last_move_time{ std::chrono::steady_clock::now() }
+        , pad{ breakout::core::Position(pad_position_width, pad_position_height), paddle_width , paddle_height, paddle_speed }
+        , ball{ breakout::core::Position(static_cast<float>(width / 2 - radius), static_cast<float>(height / 2 - radius)), radius, initial_ball_velocity_x, initial_ball_velocity_y }
 	{
 		window.setFramerateLimit(60);
 	}
@@ -21,33 +28,65 @@ namespace breakout::core {
         sf::RectangleShape show_pad;
         show_pad.setSize(sf::Vector2f(paddle_width, paddle_height));
         show_pad.setFillColor(sf::Color::White);
+        sf::CircleShape show_ball;
+        show_ball.setRadius(radius);
+        show_ball.setFillColor(sf::Color::White);
         while (window.isOpen())
         {
             while (const std::optional event = window.pollEvent())
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-                {
-                    pad.setDirection(breakout::entities::Paddle::Direction::Left);
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-                {
-                    pad.setDirection(breakout::entities::Paddle::Direction::Right);
-                }
-                else
-                {
-                    pad.setDirection(breakout::entities::Paddle::Direction::None);
-                }
                 if (event->is<sf::Event::Closed>())
                     window.close();
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+            {
+                pad.setDirection(breakout::entities::Paddle::Direction::Left);
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+            {
+                pad.setDirection(breakout::entities::Paddle::Direction::Right);
+            }
+            else
+            {
+                pad.setDirection(breakout::entities::Paddle::Direction::None);
+            }
             window.clear(sf::Color::Black);
             window.draw(show_pad);
-            auto time_now = std::chrono::steady_clock::now();
-            auto delta = std::chrono::duration<float>(time_now - last_move_time).count();
-            pad.move(delta);
-            auto pos = pad.getPosition();
-            show_pad.setPosition({ pos.x, pos.y });
-            last_move_time = time_now;
+            window.draw(show_ball);
+            if (!game_over)
+            {
+                auto time_now = std::chrono::steady_clock::now();
+                auto delta = std::chrono::duration<float>(time_now - last_move_time).count();
+                pad.move(delta);
+                pad.clampX(left_boundary, right_boundary);
+                auto pos_pad = pad.getPosition();
+                show_pad.setPosition({ pos_pad.x, pos_pad.y });
+                ball.move(delta);
+                auto pos_ball = ball.getPosition();
+                if (pos_ball.x <= 0)
+                {
+                    ball.reverse_velocity_x();
+                }
+                if ((pos_ball.x + 2 * radius) >= width)
+                {
+                    ball.reverse_velocity_x();
+                }
+                if (pos_ball.y <= 0)
+                {
+                    ball.reverse_velocity_y();
+                }
+                if (pos_ball.y + 2 * radius >= pos_pad.y && 
+                    ((pos_ball.x >= pos_pad.x && pos_ball.x <= pos_pad.x + paddle_width) || ( pos_ball.x + 2*radius >= pos_pad.x && pos_ball.x + 2* radius <= pos_pad.x + paddle_width)))
+                {
+                    ball.reverse_velocity_y();
+                }
+                if (pos_ball.y + 2 * radius >= height)
+                {
+                    game_over = true;
+                }
+                show_ball.setPosition({ pos_ball.x, pos_ball.y });
+                last_move_time = time_now;
+            }
             window.display();
         }
 	}

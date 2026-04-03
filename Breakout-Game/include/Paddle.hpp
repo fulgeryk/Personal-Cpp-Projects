@@ -23,5 +23,6 @@ namespace breakout::entities
 		void setDirection(Direction new_direction);
 		void move(float delta_time);
 		const breakout::core::Position& getPosition() const;
+		void clampX(float min, float max);
 	};
 }

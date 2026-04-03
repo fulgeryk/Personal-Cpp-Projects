@@ -9,6 +9,7 @@ add_executable(breakout_game
 	src/main.cpp
 	src/Game.cpp
 	src/Paddle.cpp
+	src/Ball.cpp
 )
 
 target_include_directories(breakout_game PRIVATE include)

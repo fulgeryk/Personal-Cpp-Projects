@@ -22,4 +22,9 @@ namespace breakout::entities
 	{
 		return position;
 	}
+	void Paddle::clampX(float min, float max)
+	{
+		if (position.x < min) { position.x = min; }
+		if (position.x + width > max) { position.x = max - width; }
+	}
 }
