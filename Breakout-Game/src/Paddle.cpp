@@ -18,4 +18,8 @@ namespace breakout::entities
 			position.x += misc;
 		}
 	}
+	const breakout::core::Position& Paddle::getPosition() const
+	{
+		return position;
+	}
 }
