@@ -46,7 +46,7 @@ int main()
     std::cout << "[INFO-Server] Accept with success \n";
 
     char buffer[1024];
-    ssize_t bytesRecv = recv(serverSock, buffer, sizeof(buffer) - 1, 0);
+    ssize_t bytesRecv = recv(acceptSock, buffer, sizeof(buffer) - 1, 0);
     if (bytesRecv == -1)
     {
         std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
