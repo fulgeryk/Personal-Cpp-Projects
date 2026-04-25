@@ -9,12 +9,12 @@
 int main()
 {
     int serverSock = socket(AF_INET, SOCK_STREAM, 0);
-    std::cout << "[INFO-Server] Socket created\n";
     if (serverSock == -1)
     {
         std::cout << " [ERROR-Server] Error while creating socket: " << strerror(errno) << "\n";
         return 1;
     }
+    std::cout << "[INFO-Server] Socket created\n";
 
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
@@ -25,6 +25,7 @@ int main()
     if (bindSock == -1)
     {
         std::cout << "[ERROR-Server] Error while bind socket:" << strerror(errno) << "\n";
+        close(serverSock);
         return 1;
     }
     std::cout << "[INFO-Server] Bind  success created\n";
@@ -33,6 +34,7 @@ int main()
     if (listenSock == -1)
     {
         std::cout << "[ERROR-Server] Error listen socket:" << strerror(errno) << "\n";
+        close(serverSock);
         return 1;
     }
     std::cout << "[INFO-Server] Listen with success \n";
@@ -41,6 +43,7 @@ int main()
     if (acceptSock == -1)
     {
         std::cout << "[ERROR-Server] Error accept socket:" << strerror(errno) << "\n";
+        close(serverSock);
         return 1;
     }
     std::cout << "[INFO-Server] Accept with success \n";
@@ -50,11 +53,21 @@ int main()
     if (bytesRecv == -1)
     {
         std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
+        close(acceptSock);
+        close(serverSock);
         return 1;
     }
+    else if (bytesRecv == 0)
+    {
+        std::cout << "[INFO-Server] Client close connection without send date";
+        close(acceptSock);
+        close(serverSock);
+        return 0;
+    }
     std::cout << "[INFO-Server] Bytes receives with success \n";
-
+    buffer[bytesRecv] = '\0';
     std::cout << "Message from client: " << buffer << std::endl;
+    close(acceptSock);
     close(serverSock);
     std::cout << "[INFO-Server] Socket closed\n";
     return 0;

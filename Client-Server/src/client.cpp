@@ -31,7 +31,7 @@ int main()
     int connectSock = connect(clientSock, reinterpret_cast<sockaddr*>(&serverAddr), sizeof(serverAddr));
     if (connectSock == -1)
     {
-        std::cout << "[ERROR-Client] Error while bind socket:" << strerror(errno) << "\n";
+        std::cout << "[ERROR-Client] Error while connecting:" << strerror(errno) << "\n";
         return 1;
     }
     std::cout << "[INFO-Client] Client connected with success\n";
