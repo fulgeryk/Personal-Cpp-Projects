@@ -20,7 +20,13 @@ int main()
     struct sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(5050);
-    serverAddr.sin_addr.s_addr = inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+    int ipResult = inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+    if (ipResult <= 0)
+    {
+        std::cout << "[ERROR-Client] IP invalid:" << strerror(errno) << "\n";
+        return 1;
+    }
+    std::cout << "[INFO-Client] ipResult success\n";
 
     int connectSock = connect(clientSock, reinterpret_cast<sockaddr*>(&serverAddr), sizeof(serverAddr));
     if (connectSock == -1)
