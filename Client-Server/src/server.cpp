@@ -11,7 +11,7 @@ namespace server
     std::string responseMessage(const char* message, size_t count)
     {
         std::string msg(message, count);
-         if (msg == "PING")
+        if (msg == "PING")
         {
             return "PONG";
         }
