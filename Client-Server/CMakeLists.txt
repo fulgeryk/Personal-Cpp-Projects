@@ -11,3 +11,6 @@ add_executable(server
 add_executable(client
     src/client.cpp
 )
+
+target_include_directories(server PRIVATE include)
+target_include_directories(client PRIVATE include)

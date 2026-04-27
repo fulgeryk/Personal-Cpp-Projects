@@ -1,10 +1,34 @@
-#include <iostream>
-#include <cstring>   // strerror
-#include <cerrno>    // errno
-#include <sys/socket.h> //socket, bind, listen, accept
-#include <netinet/in.h> // IP + port
-#include <arpa/inet.h> // IPs (ex: "127.0.0.1")
-#include <unistd.h> //System (close)
+#include "server.hpp"
+
+namespace server
+{
+    std::string currentTimeString()
+    {
+        const auto now = std::chrono::system_clock::now();
+        const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
+        return std::ctime(&t_c);
+    }
+    std::string responseMessage(const char* message, size_t count)
+    {
+        std::string msg(message, count);
+         if (msg == "PING")
+        {
+            return "PONG";
+        }
+        else if (msg == "TIME")
+        {
+            return currentTimeString();
+        }
+        else if (msg == "HELLO")
+        {
+            return "Hello Client";
+        }
+        else
+        {
+            return "Unknown command";
+        }
+    }
+}
 
 int main()
 {
@@ -59,17 +83,30 @@ int main()
     }
     else if (bytesRecv == 0)
     {
-        std::cout << "[INFO-Server] Client close connection without send date";
+        std::cout << "[INFO-Server] Client closed connection without send data";
         close(acceptSock);
         close(serverSock);
         return 0;
     }
     std::cout << "[INFO-Server] Bytes receives with success \n";
-    buffer[bytesRecv] = '\0';
-    std::cout << "Message from client: " << buffer << std::endl;
+    std::string messageReceived(buffer, bytesRecv);
+    std::cout << "Message from client: " << messageReceived << std::endl;
+
+    std::string sendMsg = server::responseMessage(messageReceived.c_str(), messageReceived.size());
+    ssize_t bytesSentServer = send(acceptSock, sendMsg.c_str(), sendMsg.size(), 0);
+    if (bytesSentServer == -1)
+    {
+        std::cout << "[ERROR-Server] Error while sending message:" << strerror(errno) << "\n";
+        close(acceptSock);
+        close(serverSock);
+        return 1;
+    }
+    if (bytesSentServer != static_cast<ssize_t>(sendMsg.size()))
+    {
+        std::cout << "[WARN-Server] Not all bytes were sent\n";
+    }
     close(acceptSock);
     close(serverSock);
     std::cout << "[INFO-Server] Socket closed\n";
     return 0;
 }
-
