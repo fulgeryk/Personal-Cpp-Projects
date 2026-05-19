@@ -13,11 +13,11 @@ int main()
     struct sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(5050);
-    int ipResult = inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+    int ipResult = inet_pton(AF_INET, ip_raspberry, &serverAddr.sin_addr);
     if (ipResult <= 0)
     {
         std::cout << "[ERROR-Client] IP invalid:" << strerror(errno) << "\n";
-        close(clientSock);
+        close(clientSock);  
         return 1;
     }
     std::cout << "[INFO-Client] ipResult success\n";
