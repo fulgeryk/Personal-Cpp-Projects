@@ -28,6 +28,40 @@ namespace server
             return "Unknown command";
         }
     }
+    void handleClient(int clientSocket)
+    {
+        char buffer[1024];
+        ssize_t bytesRecv = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+        if (bytesRecv == -1)
+        {
+            std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
+            close(clientSocket);
+            return;
+        }
+        else if (bytesRecv == 0)
+        {
+            std::cout << "[INFO-Server] Client closed connection without send data";
+            close(clientSocket);
+            return;
+        }
+        std::cout << "[INFO-Server] Bytes receives with success \n";
+        std::string messageReceived(buffer, bytesRecv);
+        std::cout << "Message from client: " << messageReceived << std::endl;
+
+        std::string sendMsg = server::responseMessage(messageReceived.c_str(), messageReceived.size());
+        ssize_t bytesSentServer = send(clientSocket, sendMsg.c_str(), sendMsg.size(), 0);
+        if (bytesSentServer == -1)
+        {
+            std::cout << "[ERROR-Server] Error while sending message:" << strerror(errno) << "\n";
+            close(clientSocket);
+            return;
+        }
+        if (bytesSentServer != static_cast<ssize_t>(sendMsg.size()))
+        {
+            std::cout << "[WARN-Server] Not all bytes were sent\n";
+        }
+        close(clientSocket);
+    }
 }
 
 int main()
@@ -72,41 +106,8 @@ int main()
             return 1;
         }
         std::cout << "[INFO-Server] Accept with success \n";
-
-        char buffer[1024];
-        ssize_t bytesRecv = recv(acceptSock, buffer, sizeof(buffer) - 1, 0);
-        if (bytesRecv == -1)
-        {
-            std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
-            close(acceptSock);
-            continue;
-            return 1;
-        }
-        else if (bytesRecv == 0)
-        {
-            std::cout << "[INFO-Server] Client closed connection without send data";
-            close(acceptSock);
-            continue;
-            return 0;
-        }
-        std::cout << "[INFO-Server] Bytes receives with success \n";
-        std::string messageReceived(buffer, bytesRecv);
-        std::cout << "Message from client: " << messageReceived << std::endl;
-
-        std::string sendMsg = server::responseMessage(messageReceived.c_str(), messageReceived.size());
-        ssize_t bytesSentServer = send(acceptSock, sendMsg.c_str(), sendMsg.size(), 0);
-        if (bytesSentServer == -1)
-        {
-            std::cout << "[ERROR-Server] Error while sending message:" << strerror(errno) << "\n";
-            close(acceptSock);
-            close(serverSock);
-            return 1;
-        }
-        if (bytesSentServer != static_cast<ssize_t>(sendMsg.size()))
-        {
-            std::cout << "[WARN-Server] Not all bytes were sent\n";
-        }
-        close(acceptSock);
+        std::thread clientThread(server::handleClient, acceptSock);
+        clientThread.detach();
     }
     close(serverSock);
     std::cout << "[INFO-Server] Socket closed\n";
