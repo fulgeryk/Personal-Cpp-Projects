@@ -30,25 +30,27 @@ namespace server
     // }
     void handleClient(int clientSocket)
     {
-        char buffer[1024];
-        ssize_t bytesRecv = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-        if (bytesRecv == -1)
+        while(true)
         {
-            std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
-            closeCommunication(clientSocket);
-            return;
+            char buffer[1024];
+            ssize_t bytesRecv = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+            if (bytesRecv == -1)
+            {
+                std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
+                closeCommunication(clientSocket);
+                return;
+            }
+            else if (bytesRecv == 0)
+            {
+                std::cout << "[INFO-Server] Client closed connection without send data";
+                closeCommunication(clientSocket);
+                return;
+            }
+            std::cout << "[INFO-Server] Bytes receives with success \n";
+            std::string messageReceived(buffer, bytesRecv);
+            std::cout << "Message from client: " << messageReceived << std::endl;
+            broadcastMessage(clientSocket, messageReceived);
         }
-        else if (bytesRecv == 0)
-        {
-            std::cout << "[INFO-Server] Client closed connection without send data";
-            closeCommunication(clientSocket);
-            return;
-        }
-        std::cout << "[INFO-Server] Bytes receives with success \n";
-        std::string messageReceived(buffer, bytesRecv);
-        std::cout << "Message from client: " << messageReceived << std::endl;
-        broadcastMessage(clientSocket, messageReceived);
-        closeCommunication(clientSocket);
     }
     std::vector<int> connectedClients;
     std::mutex clientsMutex;
