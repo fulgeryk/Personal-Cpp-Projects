@@ -1,5 +1,31 @@
 #include "client.hpp"
 
+namespace client
+{
+    void receiveMessages(int clientSock)
+    {
+        while(true)
+        {
+            char bufferClient[1024];
+            ssize_t bytesRecvClient = recv(clientSock, bufferClient, sizeof(bufferClient) - 1, 0);
+            if (bytesRecvClient == -1)
+            {
+                std::cout << "[ERROR-Client] Error receive bytes:" << strerror(errno) << "\n";
+                close(clientSock);
+                return;
+            }
+            else if (bytesRecvClient == 0)
+            {
+                std::cout << "[INFO-Client] Server closed connection without sending data";
+                close(clientSock);
+                return;
+            }
+            std::cout << "[INFO-Client] Bytes receives with success \n";
+            std::string response(bufferClient, bytesRecvClient);
+            std::cout << "Message from Server: " << response << std::endl;
+        }
+    }
+}
 int main()
 {
     int clientSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,42 +56,25 @@ int main()
         return 1;
     }
     std::cout << "[INFO-Client] Client connected with success\n";
+    std::thread receiveThread(client::receiveMessages, clientSock);
+    receiveThread.detach();
 
-    std::string message{};
-    std::cout <<"Command: ";
-    std::cin >> message;
-    ssize_t bytesSent = send(clientSock, message.c_str(), message.size(), 0);
-    if (bytesSent == -1)
+    while(true)
     {
-        std::cout << "[ERROR-Client] Error while sending message:" << strerror(errno) << "\n";
-        close(clientSock);
-        return 1;
+        std::string message{};
+        std::cout <<"Message: ";
+        std::cin >> message;
+        ssize_t bytesSent = send(clientSock, message.c_str(), message.size(), 0);
+        if (bytesSent == -1)
+        {
+            std::cout << "[ERROR-Client] Error while sending message:" << strerror(errno) << "\n";
+            close(clientSock);
+            return 1;
+        }
+        if (bytesSent != static_cast<ssize_t>(message.size()))
+        {
+            std::cout << "[WARN-Client] Not all bytes were sent\n";
+        }
+        std::cout << "[INFO-Client] Send message with success \n";
     }
-    if (bytesSent != static_cast<ssize_t>(message.size()))
-    {
-        std::cout << "[WARN-Client] Not all bytes were sent\n";
-    }
-
-    char bufferClient[1024];
-    ssize_t bytesRecvClient = recv(clientSock, bufferClient, sizeof(bufferClient) - 1, 0);
-    if (bytesRecvClient == -1)
-    {
-        std::cout << "[ERROR-Client] Error receive bytes:" << strerror(errno) << "\n";
-        close(clientSock);
-        return 1;
-    }
-    else if (bytesRecvClient == 0)
-    {
-        std::cout << "[INFO-Client] Server closed connection without sending data";
-        close(clientSock);
-        return 0;
-    }
-    std::cout << "[INFO-Client] Bytes receives with success \n";
-    std::string response(bufferClient, bytesRecvClient);
-    std::cout << "Message from Server: " << response << std::endl;
-
-
-    std::cout << "[INFO-Client] Send message with success \n";
-    close(clientSock);
-    return 0;
 }
