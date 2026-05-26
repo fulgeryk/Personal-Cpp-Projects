@@ -2,32 +2,32 @@
 
 namespace server
 {
-    std::string currentTimeString()
-    {
-        const auto now = std::chrono::system_clock::now();
-        const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
-        return std::ctime(&t_c);
-    }
-    std::string responseMessage(const char* message, size_t count)
-    {
-        std::string msg(message, count);
-        if (msg == "PING")
-        {
-            return "PONG";
-        }
-        else if (msg == "TIME")
-        {
-            return currentTimeString();
-        }
-        else if (msg == "HELLO")
-        {
-            return "Hello Client";
-        }
-        else
-        {
-            return "Unknown command";
-        }
-    }
+    // std::string currentTimeString()
+    // {
+    //     const auto now = std::chrono::system_clock::now();
+    //     const std::time_t t_c = std::chrono::system_clock::to_time_t(now);
+    //     return std::ctime(&t_c);
+    // }
+    // std::string responseMessage(const char* message, size_t count)
+    // {
+    //     std::string msg(message, count);
+    //     if (msg == "PING")
+    //     {
+    //         return "PONG";
+    //     }
+    //     else if (msg == "TIME")
+    //     {
+    //         return currentTimeString();
+    //     }
+    //     else if (msg == "HELLO")
+    //     {
+    //         return "Hello Client";
+    //     }
+    //     else
+    //     {
+    //         return "Unknown command";
+    //     }
+    // }
     void handleClient(int clientSocket)
     {
         char buffer[1024];
@@ -35,32 +35,64 @@ namespace server
         if (bytesRecv == -1)
         {
             std::cout << "[ERROR-Server] Error receive bytes:" << strerror(errno) << "\n";
-            close(clientSocket);
+            closeCommunication(clientSocket);
             return;
         }
         else if (bytesRecv == 0)
         {
             std::cout << "[INFO-Server] Client closed connection without send data";
-            close(clientSocket);
+            closeCommunication(clientSocket);
             return;
         }
         std::cout << "[INFO-Server] Bytes receives with success \n";
         std::string messageReceived(buffer, bytesRecv);
         std::cout << "Message from client: " << messageReceived << std::endl;
-
-        std::string sendMsg = server::responseMessage(messageReceived.c_str(), messageReceived.size());
-        ssize_t bytesSentServer = send(clientSocket, sendMsg.c_str(), sendMsg.size(), 0);
-        if (bytesSentServer == -1)
+        broadcastMessage(clientSocket, messageReceived);
+        closeCommunication(clientSocket);
+    }
+    std::vector<int> connectedClients;
+    std::mutex clientsMutex;
+    void addClient(int clientSocket)
+    {
+        std::lock_guard<std::mutex> lock(server::clientsMutex);
+        server::connectedClients.push_back(clientSocket);
+    }
+    void removeClient(int clientSocket)
+    {
+        std::lock_guard<std::mutex> lock(server::clientsMutex);
+        for(size_t i = 0; i < connectedClients.size(); ++i)
         {
-            std::cout << "[ERROR-Server] Error while sending message:" << strerror(errno) << "\n";
-            close(clientSocket);
-            return;
+            if(connectedClients[i] == clientSocket)
+            {
+                connectedClients.erase(connectedClients.begin() + i);
+                return;
+            }
         }
-        if (bytesSentServer != static_cast<ssize_t>(sendMsg.size()))
-        {
-            std::cout << "[WARN-Server] Not all bytes were sent\n";
-        }
+    }
+    void closeCommunication(int clientSocket)
+    {
+        removeClient(clientSocket);
         close(clientSocket);
+    }
+    void broadcastMessage(int senderSocket, const std::string& message)
+    {
+        std::lock_guard<std::mutex> lock(server::clientsMutex);
+        for(size_t i = 0; i < connectedClients.size(); ++i)
+        {
+            if(connectedClients[i] != senderSocket)
+            {
+                ssize_t bytesSentServer = send(connectedClients[i], message.c_str(), message.size(), 0);
+                if (bytesSentServer == -1)
+                {
+                    std::cout << "[ERROR-Server] Error while sending message:" << strerror(errno) << "\n";
+                    continue;
+                }
+                if (bytesSentServer != static_cast<ssize_t>(message.size()))
+                {
+                    std::cout << "[WARN-Server] Not all bytes were sent\n";
+                }
+            }
+        }
     }
 }
 
@@ -106,6 +138,7 @@ int main()
             return 1;
         }
         std::cout << "[INFO-Server] Accept with success \n";
+        server::addClient(acceptSock);
         std::thread clientThread(server::handleClient, acceptSock);
         clientThread.detach();
     }
