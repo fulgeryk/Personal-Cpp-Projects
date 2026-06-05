@@ -54,18 +54,38 @@ void Client::sendMessages()
         std::string message{};
         std::cout <<"Message: ";
         std::cin >> message;
-        ssize_t bytesSent = clientSocket_.send(message.c_str(), message.size(), 0);
-        if (bytesSent == -1)
+        if(message == "/exit")
         {
-            std::cout << "[ERROR-Client] Error while sending message:" << strerror(errno) << "\n";
             running_ = false;
+            ssize_t bytesSent = clientSocket_.send(message.c_str(), message.size(), 0);
+            if (bytesSent == -1)
+            {
+                std::cout << "[ERROR-Client] Error while sending message:" << strerror(errno) << "\n";
+                running_ = false;
+                return;
+            }
+            if (bytesSent != static_cast<ssize_t>(message.size()))
+            {
+                std::cout << "[WARN-Client] Not all bytes were sent\n";
+            }
+            clientSocket_.close();
             return;
         }
-        if (bytesSent != static_cast<ssize_t>(message.size()))
+        else
         {
-            std::cout << "[WARN-Client] Not all bytes were sent\n";
+            ssize_t bytesSent = clientSocket_.send(message.c_str(), message.size(), 0);
+            if (bytesSent == -1)
+            {
+                std::cout << "[ERROR-Client] Error while sending message:" << strerror(errno) << "\n";
+                running_ = false;
+                return;
+            }
+            if (bytesSent != static_cast<ssize_t>(message.size()))
+            {
+                std::cout << "[WARN-Client] Not all bytes were sent\n";
+            }
+            std::cout << "[INFO-Client] Send message with success \n";
         }
-        std::cout << "[INFO-Client] Send message with success \n";
     }
 }
 void Client::start()
