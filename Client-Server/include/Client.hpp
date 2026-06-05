@@ -1,3 +1,4 @@
+#pragma once
 #include "ClientIf.hpp"
 #include "Socket.hpp"
 

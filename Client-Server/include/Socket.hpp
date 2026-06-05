@@ -1,3 +1,4 @@
+#pragma once
 #include "SocketIf.hpp"
 #include <sys/socket.h>
 #include <unistd.h>

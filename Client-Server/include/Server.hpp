@@ -1,3 +1,4 @@
+#pragma once
 #include "ServerIf.hpp"
 #include "Socket.hpp"
 #include <netinet/in.h>
