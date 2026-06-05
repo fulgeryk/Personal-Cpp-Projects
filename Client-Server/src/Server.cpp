@@ -67,12 +67,18 @@ void Server::handleClient(int clientSocket)
         }
         else if (bytesRecv == 0)
         {
-            std::cout << "[INFO-Server] Client closed connection without send data";
+            std::cout << "[INFO-Server] Client disconnected unexpectedly. Socket: " <<clientSocket << "\n";
             removeClient(clientSocket);
             return;
         }
         std::cout << "[INFO-Server] Bytes receives with success \n";
         std::string messageReceived(buffer, bytesRecv);
+        if(messageReceived == "/exit")
+        {
+            std::cout << "[INFO-Server] Client disconnected. Socket: " << clientSocket << "\n";
+            removeClient(clientSocket);
+            return;
+        }
         std::cout << "Message from client: " << messageReceived << std::endl;
         broadcastMessage(clientSocket, messageReceived);
     }    
