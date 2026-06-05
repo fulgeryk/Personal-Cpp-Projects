@@ -3,6 +3,7 @@
 #include <thread>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <atomic>
 
 class ClientIf{
 public:

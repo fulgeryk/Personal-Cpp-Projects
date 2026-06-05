@@ -16,7 +16,7 @@ private:
     Socket clientSocket_;
     const char* ip_{"192.168.1.134"};
     uint16_t port_{5050};
-    bool running_{false};
+    std::atomic<bool> running_{false};
     std::thread receiveThread_;
     void connectToServer();
     void receiveMessages();

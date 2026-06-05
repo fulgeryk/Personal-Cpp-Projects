@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <memory>
 #include <thread>
+#include <atomic>
 
 constexpr uint8_t backlog{10};
 
@@ -22,7 +23,7 @@ private:
     uint16_t port_{5050};
     std::vector<std::unique_ptr<Socket>> connectedClients_;
     std::mutex clientsMutex_;
-    bool running_;
+    std::atomic<bool> running_;
     void bindSocket();
     void listenSocket(int backlog);
     void acceptClients();
