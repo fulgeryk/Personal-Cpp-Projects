@@ -4,6 +4,10 @@
 class Client : public ClientIf{
 public:
     Client();
+    Client(const Client&) = delete;
+    Client& operator=(const Client&) = delete;
+    Client(Client&&) = delete;
+    Client& operator=(Client&&) = delete;
     void start() override;
     void stop() override;
     ~Client() override;
