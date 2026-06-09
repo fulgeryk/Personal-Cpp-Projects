@@ -1,0 +1,19 @@
+# Build folder
+build/
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Executables
+server
+client
+*.out
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
