@@ -15,6 +15,13 @@ struct Player
         , speed{speed}
         {
         }
+
+    void move(float dx, float dy, float deltaTime)
+    {
+        x += dx * speed * deltaTime;
+        y += dy * speed * deltaTime;
+    }
+    
     float x;
     float y;
 
