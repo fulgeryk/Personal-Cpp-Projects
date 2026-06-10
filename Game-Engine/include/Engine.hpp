@@ -2,6 +2,8 @@
 #define _ENGINE_HPP_
 
 #include "Window.hpp"
+#include "Renderer.hpp"
+#include "Player.hpp"
 #include <memory>
 
 class Engine
@@ -20,6 +22,8 @@ public:
 private:
     bool running_{false};
     std::unique_ptr<Window> window_;
+    std::unique_ptr<Renderer> renderer_;
+    Player player_;
 }; 
 
 #endif /* _ENDINGE_HPP_ */

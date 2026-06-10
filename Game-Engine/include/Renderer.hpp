@@ -1,0 +1,28 @@
+#ifndef _RENDERER_HPP_
+#define _RENDERER_HPP_
+
+#include "Window.hpp"
+#include "SDL2/SDL.h"
+
+class Renderer
+{
+public:
+    explicit Renderer(Window& window);
+    ~Renderer();
+
+    Renderer(const Renderer&) = delete;
+    Renderer& operator=(const Renderer&) = delete;
+
+    Renderer(Renderer&& other) noexcept;
+    Renderer& operator=(Renderer&& other) noexcept;
+
+    void clear();
+    void present();
+    void drawRect(int x, int y, int width, int height);
+
+    SDL_Renderer* getNativeRender() const;
+private:
+    SDL_Renderer* renderer_{nullptr};
+};
+
+#endif /* _RENDERER_HPP_ */

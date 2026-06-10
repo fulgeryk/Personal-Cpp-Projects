@@ -10,6 +10,7 @@ find_package(SDL2 REQUIRED)
 add_executable(GameEngine
     src/Engine.cpp
     src/Window.cpp
+    src/Renderer.cpp
     src/main.cpp
 )
 

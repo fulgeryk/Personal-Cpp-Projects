@@ -8,6 +8,7 @@ Engine::Engine()
         throw std::runtime_error(SDL_GetError());
     }
     window_ = std::make_unique<Window>("Game Engine", 800, 600);
+    renderer_ = std::make_unique<Renderer>(*window_);
 }
 Engine::~Engine()
 {
@@ -26,5 +27,13 @@ void Engine::run()
                 running_ = false;
             }
         }
+        renderer_->clear();
+        renderer_->drawRect(
+            static_cast<int>(player_.x),
+            static_cast<int>(player_.y),
+            static_cast<int>(player_.width),
+            static_cast<int>(player_.height)
+        );
+        renderer_->present();
     }
 }
