@@ -4,6 +4,7 @@
 #include "Window.hpp"
 #include "Renderer.hpp"
 #include "Player.hpp"
+#include "EntityManager.hpp"
 #include <memory>
 
 class Engine
@@ -26,6 +27,7 @@ private:
     std::unique_ptr<Window> window_;
     std::unique_ptr<Renderer> renderer_;
     Player player_;
+    EntityManager entityManager_;
     uint32_t lastFrameTime_{0};
 }; 
 

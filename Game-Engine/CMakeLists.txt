@@ -11,6 +11,9 @@ add_executable(GameEngine
     src/Engine.cpp
     src/Window.cpp
     src/Renderer.cpp
+    src/Entity.cpp
+    src/Player.cpp
+    src/EntityManager.cpp
     src/main.cpp
 )
 

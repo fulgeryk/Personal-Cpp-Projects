@@ -1,33 +1,15 @@
 #ifndef _PLAYER_HPP_
 #define _PLAYER_HPP_
 
-struct Player
+#include "Entity.hpp"
+
+class Player : public Entity
 {
-    Player(float x = 100.0f,
-           float y = 100.0f,
-           float width = 50.0f,
-           float height = 50.0f,
-           float speed = 200.0f)
-        : x{x}
-        , y{y}
-        , width{width}
-        , height{height}
-        , speed{speed}
-        {
-        }
+public:
+    Player(float x = 100.0f, float y = 100.0f, float width = 50.0f, float height = 50.0f, float speed = 200.0f);
+    void move(float dx, float dy, float deltaTime);
 
-    void move(float dx, float dy, float deltaTime)
-    {
-        x += dx * speed * deltaTime;
-        y += dy * speed * deltaTime;
-    }
-    
-    float x;
-    float y;
-
-    float width;
-    float height;
-
-    float speed;
+private:
+    float speed_;
 };
 #endif /* _PLAYER_HPP_ */

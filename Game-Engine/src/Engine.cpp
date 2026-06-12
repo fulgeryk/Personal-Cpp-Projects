@@ -9,6 +9,8 @@ Engine::Engine()
     }
     window_ = std::make_unique<Window>("Game Engine", 800, 600);
     renderer_ = std::make_unique<Renderer>(*window_);
+    entityManager_.createEntity(300.0f, 100.0f, 50.0f, 50.0f);
+    entityManager_.createEntity(500.0f, 300.0f, 80.0f, 40.0f);
     lastFrameTime_ = SDL_GetTicks();
 }
 Engine::~Engine()
@@ -59,11 +61,23 @@ void Engine::run()
         handlePlayerMovement(deltaTime);
         renderer_->clear();
         renderer_->drawRect(
-            static_cast<int>(player_.x),
-            static_cast<int>(player_.y),
-            static_cast<int>(player_.width),
-            static_cast<int>(player_.height)
+            static_cast<int>(player_.getX()),
+            static_cast<int>(player_.getY()),
+            static_cast<int>(player_.getWidth()),
+            static_cast<int>(player_.getHeight())
         );
+        for(const auto& entity : entityManager_.getEntities())
+        {
+            if(entity->isActive())
+            {
+                renderer_->drawRect(
+                    static_cast<int>(entity->getX()),
+                    static_cast<int>(entity->getY()),
+                    static_cast<int>(entity->getWidth()),
+                    static_cast<int>(entity->getHeight())
+                );                
+            }
+        }
         renderer_->present();
     }
 }
