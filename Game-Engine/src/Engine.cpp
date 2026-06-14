@@ -9,8 +9,12 @@ Engine::Engine()
     }
     window_ = std::make_unique<Window>("Game Engine", 800, 600);
     renderer_ = std::make_unique<Renderer>(*window_);
-    entityManager_.createEntity(300.0f, 100.0f, 50.0f, 50.0f);
-    entityManager_.createEntity(500.0f, 300.0f, 80.0f, 40.0f);
+    Entity& entity1 = entityManager_.createEntity();
+    entity1.addTransform(300.0f, 100.0f, 50.0f, 50.0f);
+    entity1.addSprite(255, 0, 0);
+    Entity& entity2 = entityManager_.createEntity();
+    entity2.addTransform(500.0f, 300.0f, 80.0f, 40.0f);
+    entity2.addSprite(0, 255, 0);
     lastFrameTime_ = SDL_GetTicks();
 }
 Engine::~Engine()
@@ -60,22 +64,40 @@ void Engine::run()
         }
         handlePlayerMovement(deltaTime);
         renderer_->clear();
-        renderer_->drawRect(
-            static_cast<int>(player_.getX()),
-            static_cast<int>(player_.getY()),
-            static_cast<int>(player_.getWidth()),
-            static_cast<int>(player_.getHeight())
-        );
+        auto* playerTransform = player_.getTransform();
+        auto* playerSprite = player_.getSprite();
+        if (playerTransform != nullptr)
+        {
+            renderer_->drawRect(
+                static_cast<int>(playerTransform->getX()),
+                static_cast<int>(playerTransform->getY()),
+                static_cast<int>(playerTransform->getWidth()),
+                static_cast<int>(playerTransform->getHeight()),
+                playerSprite->getR(),
+                playerSprite->getG(),
+                playerSprite->getB(),
+                playerSprite->getA()
+            );
+        }
         for(const auto& entity : entityManager_.getEntities())
         {
             if(entity->isActive())
             {
-                renderer_->drawRect(
-                    static_cast<int>(entity->getX()),
-                    static_cast<int>(entity->getY()),
-                    static_cast<int>(entity->getWidth()),
-                    static_cast<int>(entity->getHeight())
-                );                
+                auto* transform = entity->getTransform();
+                auto* sprite = entity->getSprite();
+                if(transform != nullptr && sprite != nullptr)
+                {
+                    renderer_->drawRect(
+                        static_cast<int>(transform->getX()),
+                        static_cast<int>(transform->getY()),
+                        static_cast<int>(transform->getWidth()),
+                        static_cast<int>(transform->getHeight()),
+                        sprite->getR(),
+                        sprite->getG(),
+                        sprite->getB(),
+                        sprite->getA()
+                    );  
+                }              
             }
         }
         renderer_->present();

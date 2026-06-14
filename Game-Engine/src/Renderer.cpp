@@ -53,7 +53,7 @@ void Renderer::present()
 {
     SDL_RenderPresent(renderer_);
 }
-void Renderer::drawRect(int x, int y, int width, int height)
+void Renderer::drawRect(int x, int y, int width, int height, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
     SDL_Rect rect{
         x,
@@ -63,10 +63,10 @@ void Renderer::drawRect(int x, int y, int width, int height)
     };
     SDL_SetRenderDrawColor(
         renderer_,
-        255,
-        255,
-        255,
-        255
+        r,
+        g,
+        b,
+        a
     );
     SDL_RenderFillRect(renderer_, &rect);
 }

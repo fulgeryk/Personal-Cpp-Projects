@@ -18,7 +18,7 @@ public:
     EntityManager(EntityManager&&) = delete;
     EntityManager& operator=(EntityManager&&) = delete;
 
-    Entity& createEntity(float x, float y, float width, float height);
+    Entity& createEntity();
 
     const std::vector<std::unique_ptr<Entity>>& getEntities() const;
 

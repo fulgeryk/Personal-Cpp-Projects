@@ -1,10 +1,16 @@
 #ifndef _ENTITY_HPP_
 #define _ENTITY_HPP_
 
+#include "TransformComponent.hpp"
+#include "SpriteComponent.hpp"
+#include "MovementComponent.hpp"
+#include <vector>
+#include <memory>
+
 class Entity
 {
 public:
-    Entity(float x, float y, float width, float height);
+    Entity() = default;
     
     Entity(const Entity&) = delete;
     Entity& operator=(const Entity&) = delete;
@@ -14,22 +20,21 @@ public:
 
     virtual ~Entity() = default;
 
-    float getX() const;
-    float getY() const;
-    float getWidth() const;
-    float getHeight() const;
     bool isActive() const;
 
-    void move(float dx, float dy);
+    void addTransform(float x, float y, float width, float height);
+    TransformComponent* getTransform();
+
+    void addSprite(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255U);
+    SpriteComponent* getSprite();
+
+    void addMovement(float speed);
+    MovementComponent* getMovement();
+
     void setActive(bool active);
 private:
-    float x;
-    float y;
-    float width;
-    float height;
     bool active_{true};
+    std::vector<std::unique_ptr<Component>> components_;
 };
-
-
 
 #endif /* _ENTITY_HPP_ */

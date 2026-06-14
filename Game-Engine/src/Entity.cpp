@@ -1,41 +1,61 @@
 #include "Entity.hpp"
 #include <stdexcept>
 
-Entity::Entity(float x, float y, float width, float height) : x{x}, y{y}, width{width}, height{height}
+void Entity::addTransform(float x, float y, float width, float height)
 {
-    if(width <= 0.0f)
+    auto transform = std::make_unique<TransformComponent>(x, y, width, height);
+    components_.push_back(std::move(transform));
+}
+TransformComponent* Entity::getTransform()
+{
+    for(auto& component : components_)
     {
-        throw std::invalid_argument("Entity width must be greater than 0");
+        auto* transform = dynamic_cast<TransformComponent*>(component.get());
+        if (transform != nullptr)
+        {
+            return transform;
+        }
     }
-    if(height <= 0.0f)
+    return nullptr;
+}
+void Entity::addSprite(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+    auto sprite = std::make_unique<SpriteComponent>(r, g, b, a);
+    components_.push_back(std::move(sprite));
+}
+SpriteComponent* Entity::getSprite()
+{
+    for(auto& component : components_)
     {
-        throw std::invalid_argument("Entity height must be greater than 0");
+        auto* sprite = dynamic_cast<SpriteComponent*>(component.get());
+        if(sprite != nullptr)
+        {
+            return sprite;
+        }
     }
+    return nullptr;
 }
-float Entity::getX() const
+void Entity::addMovement(float speed)
 {
-    return x;
+    auto movement = std::make_unique<MovementComponent>(speed);
+    components_.push_back(std::move(movement));
 }
-float Entity::getY() const
+MovementComponent* Entity::getMovement()
 {
-    return y;
+    for(auto& component : components_)
+    {
+        auto* movement = dynamic_cast<MovementComponent*>(component.get());
+        if(movement != nullptr)
+        {
+            return movement;
+        }
+    }
+    return nullptr;
 }
-float Entity::getWidth() const
-{
-    return width;
-}
-float Entity::getHeight() const
-{
-    return height;
-}
+
 bool Entity::isActive() const
 {
     return active_;
-}
-void Entity::move(float dx, float dy)
-{
-    x += dx;
-    y += dy;
 }
 void Entity::setActive(bool active)
 {

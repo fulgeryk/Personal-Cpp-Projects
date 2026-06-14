@@ -1,8 +1,8 @@
 #include "EntityManager.hpp"
 
-Entity& EntityManager::createEntity(float x, float y, float width, float height)
+Entity& EntityManager::createEntity()
 {
-    auto entity = std::make_unique<Entity>(x,y,width,height);
+    auto entity = std::make_unique<Entity>();
     Entity& ref = *entity;
     entities_.push_back(std::move(entity));
     return ref;
