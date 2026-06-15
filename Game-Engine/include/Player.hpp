@@ -2,6 +2,9 @@
 #define _PLAYER_HPP_
 
 #include "Entity.hpp"
+#include "TransformComponent.hpp"
+#include "SpriteComponent.hpp"
+#include "MovementComponent.hpp"
 
 class Player : public Entity
 {

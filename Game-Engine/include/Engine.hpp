@@ -5,6 +5,8 @@
 #include "Renderer.hpp"
 #include "Player.hpp"
 #include "EntityManager.hpp"
+#include "TransformComponent.hpp"
+#include "SpriteComponent.hpp"
 #include <memory>
 
 class Engine

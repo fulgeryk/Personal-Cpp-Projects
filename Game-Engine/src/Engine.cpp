@@ -19,6 +19,8 @@ Engine::Engine()
 }
 Engine::~Engine()
 {
+    renderer_.reset();
+    window_.reset();
     SDL_Quit();
 }
 float Engine::calculateDeltaTime()
@@ -66,7 +68,7 @@ void Engine::run()
         renderer_->clear();
         auto* playerTransform = player_.getComponent<TransformComponent>();
         auto* playerSprite = player_.getComponent<SpriteComponent>();
-        if (playerTransform != nullptr)
+        if (playerTransform != nullptr && playerSprite != nullptr)
         {
             renderer_->drawRect(
                 static_cast<int>(playerTransform->getX()),

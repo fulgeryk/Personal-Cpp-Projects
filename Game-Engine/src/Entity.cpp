@@ -1,5 +1,4 @@
 #include "Entity.hpp"
-#include <stdexcept>
 
 bool Entity::isActive() const
 {

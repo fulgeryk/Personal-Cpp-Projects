@@ -1,9 +1,7 @@
 #ifndef _ENTITY_HPP_
 #define _ENTITY_HPP_
 
-#include "TransformComponent.hpp"
-#include "SpriteComponent.hpp"
-#include "MovementComponent.hpp"
+#include "Component.hpp"
 #include <vector>
 #include <memory>
 #include <utility>
