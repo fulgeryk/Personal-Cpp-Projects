@@ -6,6 +6,7 @@
 #include "MovementComponent.hpp"
 #include <vector>
 #include <memory>
+#include <utility>
 
 class Entity
 {
@@ -22,15 +23,29 @@ public:
 
     bool isActive() const;
 
-    void addTransform(float x, float y, float width, float height);
-    TransformComponent* getTransform();
+    template<typename T, typename... Args>
+    T& addComponent(Args&&... args)
+    {
+        auto component = std::make_unique<T>(std::forward<Args>(args)...);
+        T& ref = *component;
+        components_.push_back(std::move(component));
+        return ref;
+    }
 
-    void addSprite(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255U);
-    SpriteComponent* getSprite();
-
-    void addMovement(float speed);
-    MovementComponent* getMovement();
-
+    template<typename T>
+    T* getComponent()
+    {
+        for(auto& component : components_)
+        {
+            auto* comp = dynamic_cast<T*>(component.get());
+            if(comp != nullptr)
+            {
+                return comp;
+            }
+        }
+        return nullptr;
+    }
+    
     void setActive(bool active);
 private:
     bool active_{true};

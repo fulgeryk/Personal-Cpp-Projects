@@ -10,11 +10,11 @@ Engine::Engine()
     window_ = std::make_unique<Window>("Game Engine", 800, 600);
     renderer_ = std::make_unique<Renderer>(*window_);
     Entity& entity1 = entityManager_.createEntity();
-    entity1.addTransform(300.0f, 100.0f, 50.0f, 50.0f);
-    entity1.addSprite(255, 0, 0);
+    entity1.addComponent<TransformComponent>(300.0f, 100.0f, 50.0f, 50.0f);
+    entity1.addComponent<SpriteComponent>(255, 0, 0);
     Entity& entity2 = entityManager_.createEntity();
-    entity2.addTransform(500.0f, 300.0f, 80.0f, 40.0f);
-    entity2.addSprite(0, 255, 0);
+    entity2.addComponent<TransformComponent>(500.0f, 300.0f, 80.0f, 40.0f);
+    entity2.addComponent<SpriteComponent>(0, 255, 0);
     lastFrameTime_ = SDL_GetTicks();
 }
 Engine::~Engine()
@@ -64,8 +64,8 @@ void Engine::run()
         }
         handlePlayerMovement(deltaTime);
         renderer_->clear();
-        auto* playerTransform = player_.getTransform();
-        auto* playerSprite = player_.getSprite();
+        auto* playerTransform = player_.getComponent<TransformComponent>();
+        auto* playerSprite = player_.getComponent<SpriteComponent>();
         if (playerTransform != nullptr)
         {
             renderer_->drawRect(
@@ -83,8 +83,8 @@ void Engine::run()
         {
             if(entity->isActive())
             {
-                auto* transform = entity->getTransform();
-                auto* sprite = entity->getSprite();
+                auto* transform = entity->getComponent<TransformComponent>();
+                auto* sprite = entity->getComponent<SpriteComponent>();
                 if(transform != nullptr && sprite != nullptr)
                 {
                     renderer_->drawRect(
