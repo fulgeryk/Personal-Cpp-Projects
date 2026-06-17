@@ -30,7 +30,7 @@ Engine::Engine()
     {
         throw std::runtime_error("Player texture failed");
     }
-    #endif
+    #endif /* DEBUG */
 
     Entity& entity1 = entityManager_.createEntity();
     entity1.addComponent<TransformComponent>(300.0f, 100.0f, 50.0f, 50.0f);
