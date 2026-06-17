@@ -1,5 +1,5 @@
-#ifndef _PLAYER_HPP_
-#define _PLAYER_HPP_
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include "Entity.hpp"
 #include "TransformComponent.hpp"
@@ -13,4 +13,4 @@ public:
            uint8_t r = 255U, uint8_t g = 255U, uint8_t b = 255U, uint8_t a = 255U);
     void move(float dx, float dy, float deltaTime);
 };
-#endif /* _PLAYER_HPP_ */
+#endif /* PLAYER_HPP */

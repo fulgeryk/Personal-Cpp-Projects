@@ -1,5 +1,5 @@
-#ifndef _ENTITY_HPP_
-#define _ENTITY_HPP_
+#ifndef ENTITY_HPP
+#define ENTITY_HPP
 
 #include "Component.hpp"
 #include <vector>
@@ -50,4 +50,4 @@ private:
     std::vector<std::unique_ptr<Component>> components_;
 };
 
-#endif /* _ENTITY_HPP_ */
+#endif /* ENTITY_HPP */

@@ -1,5 +1,5 @@
-#ifndef _WINDOW_HPP_
-#define _WINDOW_HPP_
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
 #include <SDL2/SDL.h>
 #include <string>
@@ -22,4 +22,4 @@ private:
     SDL_Window* window_{nullptr};
 };
 
-#endif /* _WINDOW_HPP_ */
+#endif /* WINDOW_HPP */

@@ -1,5 +1,5 @@
-#ifndef _RENDERER_HPP_
-#define _RENDERER_HPP_
+#ifndef RENDERER_HPP
+#define RENDERER_HPP
 
 #include "Window.hpp"
 #include "SDL2/SDL.h"
@@ -25,4 +25,4 @@ private:
     SDL_Renderer* renderer_{nullptr};
 };
 
-#endif /* _RENDERER_HPP_ */
+#endif /* RENDERER_HPP */

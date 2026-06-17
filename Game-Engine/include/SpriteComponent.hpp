@@ -1,5 +1,5 @@
-#ifndef _SPRITE_COMPONENT_HPP_
-#define _SPRITE_COMPONENT_HPP_
+#ifndef SPRITE_COMPONENT_HPP
+#define SPRITE_COMPONENT_HPP
 
 #include "Component.hpp"
 #include <cstdint>
@@ -27,4 +27,4 @@ private:
     uint8_t a_;
 };
 
-#endif /* _SPRITE_COMPONENT_HPP_ */
+#endif /* SPRITE_COMPONENT_HPP */

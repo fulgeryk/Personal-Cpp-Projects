@@ -1,5 +1,5 @@
-#ifndef _ENGINE_HPP_
-#define _ENGINE_HPP_
+#ifndef ENGINE_HPP
+#define ENGINE_HPP
 
 #include "Window.hpp"
 #include "Renderer.hpp"
@@ -7,6 +7,7 @@
 #include "EntityManager.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "AssetManager.hpp"
 #include <memory>
 
 class Engine
@@ -30,7 +31,8 @@ private:
     std::unique_ptr<Renderer> renderer_;
     Player player_;
     EntityManager entityManager_;
+    AssetManager assetManager_;
     uint32_t lastFrameTime_{0};
 }; 
 
-#endif /* _ENDINGE_HPP_ */
+#endif /* ENDINGE_HPP */

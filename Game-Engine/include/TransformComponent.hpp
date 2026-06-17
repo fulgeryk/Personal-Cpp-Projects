@@ -1,5 +1,5 @@
-#ifndef _TRANSFORM_COMPONENT_HPP_
-#define _TRANSFORM_COMPONENT_HPP_
+#ifndef TRANSFORM_COMPONENT_HPP
+#define TRANSFORM_COMPONENT_HPP
 
 #include "Component.hpp"
 
@@ -29,4 +29,4 @@ private:
 };
 
 
-#endif /* _TRANSFORM_COMPONENT_HPP_ */
+#endif /* TRANSFORM_COMPONENT_HPP */

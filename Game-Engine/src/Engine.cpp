@@ -1,14 +1,37 @@
 #include "Engine.hpp"
 #include <stdexcept>
+namespace textures
+{
+    constexpr const char* MissingTexturePath{"assets/textures/missing_texture.png"};
+    constexpr const char* PlayerTexture{"assets/textures/player.png"};
+}
 
 Engine::Engine()
 {
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        throw std::runtime_error(SDL_GetError());
-    }
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) throw std::runtime_error(SDL_GetError());
+    if(IMG_Init(IMG_INIT_PNG) == 0) throw std::runtime_error(IMG_GetError());
     window_ = std::make_unique<Window>("Game Engine", 800, 600);
     renderer_ = std::make_unique<Renderer>(*window_);
+    assetManager_.loadFallbackTexture(renderer_->getNativeRender(), textures::MissingTexturePath);
+
+    #ifdef DEBUG
+    auto* testTexture = assetManager_.getTexture("No texture");
+    if(testTexture == nullptr)
+    {
+        throw std::runtime_error("Fallback texture failed");
+    }
+    #endif /* DEBUG */
+
+    assetManager_.loadTexture(renderer_->getNativeRender(), "player", textures::PlayerTexture);
+
+    #ifdef DEBUG
+    auto* playerTexture = assetManager_.getTexture("player");
+    if(playerTexture == nullptr)
+    {
+        throw std::runtime_error("Player texture failed");
+    }
+    #endif
+
     Entity& entity1 = entityManager_.createEntity();
     entity1.addComponent<TransformComponent>(300.0f, 100.0f, 50.0f, 50.0f);
     entity1.addComponent<SpriteComponent>(255, 0, 0);
@@ -19,8 +42,12 @@ Engine::Engine()
 }
 Engine::~Engine()
 {
+    assetManager_.clear();
+
     renderer_.reset();
     window_.reset();
+
+    IMG_Quit();
     SDL_Quit();
 }
 float Engine::calculateDeltaTime()

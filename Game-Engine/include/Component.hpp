@@ -1,5 +1,5 @@
-#ifndef _COMPONENT_HPP_
-#define _COMPONENT_HPP_
+#ifndef COMPONENT_HPP
+#define COMPONENT_HPP
 
 class Component
 {
@@ -13,4 +13,4 @@ public:
     Component(Component&&) noexcept = default;
     Component& operator=(Component&&) noexcept = default;
 };
-#endif /* _COMPONENT_HPP_ */
+#endif /* COMPONENT_HPP */

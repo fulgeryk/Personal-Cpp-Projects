@@ -1,9 +1,17 @@
 #include "Engine.hpp"
-
+#include <iostream>
 
 int main()
 {
-    Engine engine;
-    engine.run();
+    try
+    {
+        Engine engine;
+        engine.run();
+    }
+    catch(const std::exception& exception)
+    {
+        std::cerr << exception.what() << '\n';
+        return 1;
+    }
     return 0;
 }

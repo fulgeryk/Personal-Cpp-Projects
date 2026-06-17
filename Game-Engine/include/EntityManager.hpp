@@ -1,5 +1,5 @@
-#ifndef _ENTITY_MANAGER_HPP_
-#define _ENTITY_MANAGER_HPP_
+#ifndef ENTITY_MANAGER_HPP
+#define ENTITY_MANAGER_HPP
 
 #include "Entity.hpp"
 #include <memory>
@@ -26,4 +26,4 @@ public:
 private:
     std::vector<std::unique_ptr<Entity>> entities_;
 };
-#endif /* _ENTITYH_MANAGER_HPP_ */
+#endif /* ENTITYH_MANAGER_HPP */

@@ -1,5 +1,5 @@
-#ifndef _MOVEMENT_COMPONENT_HPP_
-#define _MOVEMENT_COMPONENT_HPP_
+#ifndef MOVEMENT_COMPONENT_HPP
+#define MOVEMENT_COMPONENT_HPP
 
 #include "Component.hpp"
 
@@ -20,4 +20,4 @@ private:
     float speed_;
 };
 
-#endif /* _MOVEMENT_COMPONENT_HPP_ */
+#endif /* MOVEMENT_COMPONENT_HPP */
