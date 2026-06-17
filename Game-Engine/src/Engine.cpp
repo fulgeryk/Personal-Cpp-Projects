@@ -1,5 +1,6 @@
 #include "Engine.hpp"
 #include <stdexcept>
+
 namespace textures
 {
     constexpr const char* MissingTexturePath{"assets/textures/missing_texture.png"};
