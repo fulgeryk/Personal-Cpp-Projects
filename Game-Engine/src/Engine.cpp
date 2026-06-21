@@ -36,9 +36,12 @@ Engine::Engine()
     Entity& entity1 = entityManager_.createEntity();
     entity1.addComponent<TransformComponent>(300.0f, 100.0f, 50.0f, 50.0f);
     entity1.addComponent<SpriteComponent>(255, 0, 0);
+    entity1.addComponent<TextureComponent>(assetManager_.getTexture("undefined texture"));
     Entity& entity2 = entityManager_.createEntity();
     entity2.addComponent<TransformComponent>(500.0f, 300.0f, 80.0f, 40.0f);
     entity2.addComponent<SpriteComponent>(0, 255, 0);
+    entity2.addComponent<TextureComponent>(assetManager_.getTexture("undefined texture"));
+    player_.addComponent<TextureComponent>(assetManager_.getTexture("player"));
     lastFrameTime_ = SDL_GetTicks();
 }
 Engine::~Engine()
@@ -96,18 +99,40 @@ void Engine::run()
         renderer_->clear();
         auto* playerTransform = player_.getComponent<TransformComponent>();
         auto* playerSprite = player_.getComponent<SpriteComponent>();
-        if (playerTransform != nullptr && playerSprite != nullptr)
+        auto* playerTexture = player_.getComponent<TextureComponent>();
+        if(playerTransform != nullptr)
         {
-            renderer_->drawRect(
-                static_cast<int>(playerTransform->getX()),
-                static_cast<int>(playerTransform->getY()),
-                static_cast<int>(playerTransform->getWidth()),
-                static_cast<int>(playerTransform->getHeight()),
-                playerSprite->getR(),
-                playerSprite->getG(),
-                playerSprite->getB(),
-                playerSprite->getA()
-            );
+            if(playerTexture != nullptr)
+            {
+                SDL_Rect srcRect{playerTexture->getSrcRect()};
+                SDL_Rect dstRect{
+                    static_cast<int>(playerTransform->getX()),
+                    static_cast<int>(playerTransform->getY()),
+                    static_cast<int>(playerTransform->getWidth() * playerTexture->getScale()),
+                    static_cast<int>(playerTransform->getHeight() * playerTexture->getScale())
+                };
+                renderer_->drawTexture(
+                    playerTexture->getTexture(),
+                    srcRect,
+                    dstRect
+                );
+            }
+            else if (playerSprite != nullptr)
+            {
+                SDL_Rect rect{
+                    static_cast<int>(playerTransform->getX()),
+                    static_cast<int>(playerTransform->getY()),
+                    static_cast<int>(playerTransform->getWidth()),
+                    static_cast<int>(playerTransform->getHeight())
+                };
+                renderer_->drawRect(
+                    rect,
+                    playerSprite->getR(),
+                    playerSprite->getG(),
+                    playerSprite->getB(),
+                    playerSprite->getA()
+                );
+            }
         }
         for(const auto& entity : entityManager_.getEntities())
         {
@@ -115,18 +140,41 @@ void Engine::run()
             {
                 auto* transform = entity->getComponent<TransformComponent>();
                 auto* sprite = entity->getComponent<SpriteComponent>();
-                if(transform != nullptr && sprite != nullptr)
+                auto* texture = entity->getComponent<TextureComponent>();
+                texture->setScale(0.5f);
+                if(transform != nullptr)
                 {
-                    renderer_->drawRect(
-                        static_cast<int>(transform->getX()),
-                        static_cast<int>(transform->getY()),
-                        static_cast<int>(transform->getWidth()),
-                        static_cast<int>(transform->getHeight()),
-                        sprite->getR(),
-                        sprite->getG(),
-                        sprite->getB(),
-                        sprite->getA()
-                    );  
+                    if(texture != nullptr)
+                    {
+                        SDL_Rect srcRect{texture->getSrcRect()};
+                        SDL_Rect dstRect{
+                            static_cast<int>(transform->getX()),
+                            static_cast<int>(transform->getY()),
+                            static_cast<int>(transform->getWidth() * texture->getScale()),
+                            static_cast<int>(transform->getHeight() * texture->getScale())
+                        };
+                        renderer_->drawTexture(
+                            texture->getTexture(),
+                            srcRect,
+                            dstRect
+                        );
+                    }
+                    else if(sprite != nullptr)
+                    {
+                        SDL_Rect rect{
+                            static_cast<int>(transform->getX()),
+                            static_cast<int>(transform->getY()),
+                            static_cast<int>(transform->getWidth()),
+                            static_cast<int>(transform->getHeight())
+                        };
+                        renderer_->drawRect( 
+                            rect,
+                            sprite->getR(),
+                            sprite->getG(),
+                            sprite->getB(),
+                            sprite->getA()
+                        );
+                    }  
                 }              
             }
         }

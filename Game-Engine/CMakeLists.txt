@@ -19,6 +19,7 @@ add_executable(GameEngine
     src/SpriteComponent.cpp
     src/MovementComponent.cpp
     src/AssetManager.cpp
+    src/TextureComponent.cpp
     src/main.cpp
 )
 

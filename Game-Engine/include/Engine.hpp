@@ -7,6 +7,7 @@
 #include "EntityManager.hpp"
 #include "TransformComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "TextureComponent.hpp"
 #include "AssetManager.hpp"
 #include <memory>
 
