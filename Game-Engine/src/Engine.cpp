@@ -11,7 +11,7 @@ Engine::Engine()
 {
     if(SDL_Init(SDL_INIT_VIDEO) < 0) throw std::runtime_error(SDL_GetError());
     if(IMG_Init(IMG_INIT_PNG) == 0) throw std::runtime_error(IMG_GetError());
-    window_ = std::make_unique<Window>("Game Engine", 800, 600);
+    window_ = std::make_unique<Window>("Game Engine", 1024, 768);
     renderer_ = std::make_unique<Renderer>(*window_);
     assetManager_.loadFallbackTexture(renderer_->getNativeRender(), textures::MissingTexturePath);
 
@@ -141,11 +141,12 @@ void Engine::run()
                 auto* transform = entity->getComponent<TransformComponent>();
                 auto* sprite = entity->getComponent<SpriteComponent>();
                 auto* texture = entity->getComponent<TextureComponent>();
-                texture->setScale(0.5f);
                 if(transform != nullptr)
                 {
                     if(texture != nullptr)
                     {
+                        texture->setScale(0.5f);
+
                         SDL_Rect srcRect{texture->getSrcRect()};
                         SDL_Rect dstRect{
                             static_cast<int>(transform->getX()),

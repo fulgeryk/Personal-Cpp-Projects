@@ -6,7 +6,11 @@ AssetManager::~AssetManager()
 }
 void AssetManager::clear()
 {
-    SDL_DestroyTexture(fallbackTexture_);
+    if(fallbackTexture_ != nullptr)
+    {
+        SDL_DestroyTexture(fallbackTexture_);
+        fallbackTexture_ = nullptr;
+    }
     for(auto& texture : textures_)
     {
         if(texture.second != nullptr)

@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <type_traits>
 
 class Entity
 {
@@ -24,6 +25,7 @@ public:
     template<typename T, typename... Args>
     T& addComponent(Args&&... args)
     {
+        static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
         auto component = std::make_unique<T>(std::forward<Args>(args)...);
         T& ref = *component;
         components_.push_back(std::move(component));
@@ -33,6 +35,7 @@ public:
     template<typename T>
     T* getComponent()
     {
+        static_assert(std::is_base_of_v<Component, T>, "T must inherit from Component");
         for(auto& component : components_)
         {
             auto* comp = dynamic_cast<T*>(component.get());

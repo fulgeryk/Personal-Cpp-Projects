@@ -15,8 +15,8 @@ public:
     AssetManager(const AssetManager&) = delete;
     AssetManager& operator=(const AssetManager&) = delete;
 
-    AssetManager(AssetManager&&) noexcept = default;
-    AssetManager& operator=(AssetManager&&) noexcept = default;
+    AssetManager(AssetManager&&) noexcept = delete;
+    AssetManager& operator=(AssetManager&&) noexcept = delete;
 
     void loadFallbackTexture(SDL_Renderer* renderer, const std::string& path);
 
