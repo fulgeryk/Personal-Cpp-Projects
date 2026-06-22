@@ -4,11 +4,12 @@
 #include "Window.hpp"
 #include "Renderer.hpp"
 #include "Player.hpp"
-#include "EntityManager.hpp"
-#include "TransformComponent.hpp"
-#include "SpriteComponent.hpp"
-#include "TextureComponent.hpp"
 #include "AssetManager.hpp"
+#include "SceneIf.hpp"
+#include "GameScene.hpp"
+#include "MainMenuScene.hpp"
+#include "PauseScene.hpp"
+#include "SceneType.hpp"
 #include <memory>
 
 class Engine
@@ -24,16 +25,17 @@ public:
     Engine& operator=(Engine&&) = delete;
 
     void run();
+
 private:
     float calculateDeltaTime();
-    void handlePlayerMovement(float deltaTime);
+    void changeScene(SceneType sceneType);
+
     bool running_{false};
     std::unique_ptr<Window> window_;
     std::unique_ptr<Renderer> renderer_;
-    Player player_;
-    EntityManager entityManager_;
     AssetManager assetManager_;
     uint32_t lastFrameTime_{0};
+    std::unique_ptr<SceneIf> currentScene_;
 }; 
 
 #endif /* ENDINGE_HPP */

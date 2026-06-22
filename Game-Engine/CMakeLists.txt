@@ -20,6 +20,9 @@ add_executable(GameEngine
     src/MovementComponent.cpp
     src/AssetManager.cpp
     src/TextureComponent.cpp
+    src/GameScene.cpp
+    src/MainMenuScene.cpp
+    src/PauseScene.cpp
     src/main.cpp
 )
 
