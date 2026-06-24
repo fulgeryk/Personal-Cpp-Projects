@@ -4,6 +4,13 @@
 #include "SceneIf.hpp"
 #include "Renderer.hpp"
 
+enum class MainMenuOption
+{
+    StartGame,
+    Options,
+    Quit
+};
+
 class MainMenuScene : public SceneIf
 {
 public:
@@ -23,8 +30,18 @@ public:
     SceneRequest getSceneRequest() const override;
     void clearSceneRequest() override;
 private:
+    void selectNextOption();
+    void selectPreviousOption();
+    void activateSelectedOption();
+
+    bool isPointInsideRect(int x, int y, const SDL_Rect& rect) const;
+
     Renderer& renderer_;
     SceneRequest sceneRequest_;
+    MainMenuOption selectedOption_{MainMenuOption::StartGame};
+    SDL_Rect startRect_{300, 180, 400, 80};
+    SDL_Rect optionsRect_{300, 280, 400, 80};
+    SDL_Rect quitRect_{300, 380, 400, 80};
 };
 
 
