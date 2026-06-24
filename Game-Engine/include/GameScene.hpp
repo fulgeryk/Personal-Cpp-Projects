@@ -28,6 +28,9 @@ public:
     void update(float deltaTime) override;
     void render() override;
 
+    SceneRequest getSceneRequest() const override;
+    void clearSceneRequest() override;
+
 private:
     void handlePlayerMovement(float deltaTime);
 
@@ -35,5 +38,6 @@ private:
     std::unique_ptr<EntityManager> entityManager_;
     AssetManager& assetManager_;
     Renderer& renderer_;
+    SceneRequest sceneRequest_;
 };
 #endif /* GAME_SCENE_HPP */

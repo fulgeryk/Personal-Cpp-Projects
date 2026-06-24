@@ -20,8 +20,11 @@ public:
     void update(float deltaTime) override;
     void render() override;
 
+    SceneRequest getSceneRequest() const override;
+    void clearSceneRequest() override;
 private:
     Renderer& renderer_;
+    SceneRequest sceneRequest_;
 };
 
 

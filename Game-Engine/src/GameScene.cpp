@@ -18,7 +18,14 @@ GameScene::GameScene(AssetManager& assetManager, Renderer& renderer) : assetMana
 }
 void GameScene::handleEvent(const SDL_Event& event)
 {
-
+    if(event.type == SDL_KEYDOWN)
+    {
+        if(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+            sceneRequest_.type = SceneRequestType::ChangeScene;
+            sceneRequest_.targetScene = SceneType::Pause;
+        }
+    }
 }
 void GameScene::handlePlayerMovement(float deltaTime)
 {
@@ -127,4 +134,12 @@ void GameScene::render()
             }              
         }
     }
+}
+SceneRequest GameScene::getSceneRequest() const
+{
+    return sceneRequest_;
+}
+void GameScene::clearSceneRequest()
+{
+    sceneRequest_.type = SceneRequestType::None;
 }

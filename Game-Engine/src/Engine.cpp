@@ -29,7 +29,7 @@ Engine::Engine()
         throw std::runtime_error("Player texture failed");
     }
     #endif /* DEBUG */
-    changeScene(SceneType::Game);
+    changeScene(SceneType::MainMenu);
     lastFrameTime_ = SDL_GetTicks();
 }
 Engine::~Engine()
@@ -79,8 +79,19 @@ void Engine::run()
             {
                 running_ = false;
             }
+            currentScene_->handleEvent(event);
         }
         currentScene_->update(deltaTime);
+        SceneRequest request = currentScene_->getSceneRequest();
+        currentScene_->clearSceneRequest();
+        if(request.type == SceneRequestType::ChangeScene)
+        {
+            changeScene(request.targetScene);
+        }
+        else if(request.type == SceneRequestType::Quit)
+        {
+            running_ = false;
+        }
         renderer_->clear();
         currentScene_->render();
         renderer_->present();

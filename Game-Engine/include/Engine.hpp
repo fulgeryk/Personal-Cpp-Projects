@@ -10,6 +10,7 @@
 #include "MainMenuScene.hpp"
 #include "PauseScene.hpp"
 #include "SceneType.hpp"
+#include "SceneRequest.hpp"
 #include <memory>
 
 class Engine
